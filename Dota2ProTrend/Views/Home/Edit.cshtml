@@ -1,0 +1,62 @@
+﻿@model Dota2ProTrend.Models.Match
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Match</legend>
+
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.matchnumber)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.matchnumber)
+            @Html.ValidationMessageFor(model => model.matchnumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.radiantwon)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.radiantwon)
+            @Html.ValidationMessageFor(model => model.radiantwon)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.starttime)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.starttime)
+            @Html.ValidationMessageFor(model => model.starttime)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.gamemode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.gamemode)
+            @Html.ValidationMessageFor(model => model.gamemode)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

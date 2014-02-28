@@ -1,0 +1,43 @@
+﻿@model Dota2ProTrend.Models.Match
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Match</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.matchnumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matchnumber)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.radiantwon)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.radiantwon)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.starttime)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.starttime)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.gamemode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.gamemode)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
