@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dota2ProTrend.Models.Hero>
+﻿@model IEnumerable<Dota2ProTrend.Models.Match>
 
 @{
     ViewBag.Title = "Index";
@@ -12,16 +12,17 @@
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(heroes => heroes.heronumber)
+            @Html.DisplayNameFor(model => model.matchnumber)
         </th>
         <th>
-            @Html.DisplayNameFor(heroes => heroes.heroname)
+            @Html.DisplayNameFor(model => model.radiantwon)
         </th>
         <th>
             
+            @Html.DisplayNameFor(model => model.starttime)
         </th>
         <th>
-           
+           @Html.DisplayNameFor(model => model.gamemode)
         </th>
         <th></th>
     </tr>
@@ -29,16 +30,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(heroItem => item.heronumber)
+            @Html.DisplayFor(model => item.matchnumber)
         </td>
         <td>
-            @Html.DisplayFor(heroItem => item.heroname)
+            @Html.DisplayFor(model => item.radiantwon)
         </td>
         <td>
-           
+            @Html.DisplayFor(model => item.starttime)
         </td>
         <td>
-           
+            @Html.DisplayFor(model => item.gamemode)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |

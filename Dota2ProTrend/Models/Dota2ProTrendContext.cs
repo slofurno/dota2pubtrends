@@ -24,5 +24,6 @@ namespace Dota2ProTrend.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<SkillTimings> SkillTiming { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<ItemNames> ItemNames { get; set; }
     }
 }

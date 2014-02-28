@@ -23,6 +23,8 @@ namespace Dota2ProTrend.Models
     {
 
         public int id { get; set; }
+        public int matchid { get; set; }
+        public int playerid { get; set; }
         public virtual Match match { get; set; }
         public virtual Player player { get; set; }
         public virtual ICollection<Item> items { get; set; }
@@ -45,7 +47,7 @@ namespace Dota2ProTrend.Models
     public class Player
     {
 
-        public Player(int pid, string name)
+        public Player(long pid, string name)
         {
             this.name = name;
             this.playerident = pid;
@@ -59,7 +61,7 @@ namespace Dota2ProTrend.Models
         }
 
         public int id { get; set; }
-        public int playerident { get; set; }
+        public long playerident { get; set; }
         public string name { get; set; }
 
 
@@ -75,11 +77,24 @@ namespace Dota2ProTrend.Models
 
     }
 
+    public class ItemNames
+    {
+
+        public int id { get; set; }
+        public int itemnumber { get; set; }
+        public string itemname { get; set; }
+        
+        
+
+    }
+
     public class Item
     {
         public int id { get; set; }
         public int itemnumber { get; set; }
-        public string itemname { get; set; }
+        
+        public virtual GamePlayerModel gameplayer { get; set; }
+        public int GamePlayerModel_id { get; set; }
 
     }
 
@@ -94,10 +109,12 @@ namespace Dota2ProTrend.Models
 
         }
         public int id { get; set; }
+        public int skillid { get; set; }
         public virtual Skill skill { get; set; }
         public int time { get; set; }
         public virtual GamePlayerModel gameplayer { get; set; }
-
+        public int gameplayermodelid { get; set; }
+  
     }
 
     public class Skill

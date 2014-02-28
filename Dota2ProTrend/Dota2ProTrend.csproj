@@ -139,9 +139,26 @@
     <Compile Include="Migrations\201402270607244_InitialCreate1.Designer.cs">
       <DependentUpon>201402270607244_InitialCreate1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201402280300344_add-migration idchange.cs" />
+    <Compile Include="Migrations\201402280300344_add-migration idchange.Designer.cs">
+      <DependentUpon>201402280300344_add-migration idchange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402280408051_foreignkey.cs" />
+    <Compile Include="Migrations\201402280408051_foreignkey.Designer.cs">
+      <DependentUpon>201402280408051_foreignkey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402280431275_items.cs" />
+    <Compile Include="Migrations\201402280431275_items.Designer.cs">
+      <DependentUpon>201402280431275_items.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402280557598_refactoritems.cs" />
+    <Compile Include="Migrations\201402280557598_refactoritems.Designer.cs">
+      <DependentUpon>201402280557598_refactoritems.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Dota2ProTrendContext.cs" />
     <Compile Include="Models\DotaModel.cs" />
+    <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +266,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201402270607244_InitialCreate1.resx">
       <DependentUpon>201402270607244_InitialCreate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402280300344_add-migration idchange.resx">
+      <DependentUpon>201402280300344_add-migration idchange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402280408051_foreignkey.resx">
+      <DependentUpon>201402280408051_foreignkey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402280431275_items.resx">
+      <DependentUpon>201402280431275_items.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402280557598_refactoritems.resx">
+      <DependentUpon>201402280557598_refactoritems.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -27,7 +27,7 @@ namespace Dota2ProTrend
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             System.Data.Entity.Database.SetInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<Dota2ProTrend.Models.Dota2ProTrendContext>());
-           // Thread t = new Thread(ApiCaller.populateItemandHeroData);
+            //Thread t = new Thread(ApiCaller.getSomeMatches);
 
 
            // t.Start();

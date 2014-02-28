@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Dota2ProTrend.Models;
+using System.Diagnostics;
 
 namespace Dota2ProTrend.Controllers
 {
@@ -18,7 +19,7 @@ namespace Dota2ProTrend.Controllers
 
         public ActionResult Index()
         {
-            return View(db.Heroes.ToList());
+            return View(db.Matches.ToList());
         }
 
         //
@@ -26,12 +27,14 @@ namespace Dota2ProTrend.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Match match = db.Matches.Find(id);
+            var match = db.GamePlayers.Where(s => s.matchid == id);
             if (match == null)
             {
                 return HttpNotFound();
             }
-            return View(match);
+            
+
+            return View(match.ToList());
         }
 
         //
@@ -119,5 +122,11 @@ namespace Dota2ProTrend.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+    }
+
+    public class DataViewModel
+    {
+        public ProjectNew ProjectNew { get; set; }
+        public ProjectOld ProjectOld { get; set; }
     }
 }

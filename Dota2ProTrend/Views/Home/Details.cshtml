@@ -1,4 +1,6 @@
-﻿@model Dota2ProTrend.Models.Match
+﻿@model IEnumerable<Dota2ProTrend.Models.GamePlayerModel>
+
+
 
 @{
     ViewBag.Title = "Details";
@@ -6,38 +8,50 @@
 
 <h2>Details</h2>
 
-<fieldset>
-    <legend>Match</legend>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.player.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.kills)
+        </th>
+        <th>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.matchnumber)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.matchnumber)
-    </div>
+            @Html.DisplayNameFor(model => model.deaths)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.assists)
+        </th>
+        <th></th>
+    </tr>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.radiantwon)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.radiantwon)
-    </div>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.player.name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.kills)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.deaths)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.assists)
+            </td>
+            <td>
+                
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.starttime)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.starttime)
-    </div>
+            </td>
+        </tr>
+    }
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.gamemode)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.gamemode)
-    </div>
-</fieldset>
+</table>
+
+
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    
 </p>
