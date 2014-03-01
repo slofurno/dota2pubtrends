@@ -23,6 +23,9 @@
         <th>
             @Html.DisplayNameFor(model => model.assists)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hero.heroname)
+        </th>
         <th></th>
     </tr>
 
@@ -42,9 +45,16 @@
                 @Html.DisplayFor(model => item.assists)
             </td>
             <td>
-                
-
+                @Html.DisplayFor(model => item.hero.heroname)
             </td>
+            <td>
+                @foreach (var i in item.items)
+                {
+  
+                         var ss = ("http://cdn.dota2.com/apps/dota2/images/items/" + i.iteminfo.itemurl);
+                       
+                <img src=@ss width="32" height="24"/> @:&nbsp;&nbsp;
+                     }></td>
         </tr>
     }
 

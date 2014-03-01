@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Dota2ProTrend.Models.Match>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+
+
+
+
+    @{
+        Dictionary<string, int> herolist = ViewBag.herolist;
+
+
+        var items = from pair in herolist
+                    orderby pair.Value descending
+                    select pair;
+                    
+                    
+       foreach (KeyValuePair<string, int>sts in items){
+
+           if (sts.Value > 0) { 
+                @: @sts.Key     @sts.Value  <br />
+            }
+            
+            
+        }
+  
+    }
+       
+
+
+   
+
+
+
+
+    <br />
+
+    <br />
+
+    <table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.matchnumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.radiantwon)
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.starttime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.gamemode)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => item.matchnumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.radiantwon)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.starttime)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.gamemode)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+
+    </table>

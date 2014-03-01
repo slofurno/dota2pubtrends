@@ -111,7 +111,7 @@ namespace Dota2ProTrend
         {
 
             HttpClient client = new HttpClient();
-            string baseurl = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=65C5ADADF141DB0495C3FBBCA6D65689&matches_requested=2&account_id=";
+            string baseurl = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=65C5ADADF141DB0495C3FBBCA6D65689&matches_requested=5&account_id=";
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -278,41 +278,41 @@ namespace Dota2ProTrend
                         Item tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_0");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x=> x.itemnumber==tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
 
                         tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_1");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x => x.itemnumber == tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
 
                         tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_2");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x => x.itemnumber == tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
                         tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_3");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x => x.itemnumber == tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
 
                         tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_4");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x => x.itemnumber == tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
 
                         tempitem = new Item();
 
                         tempitem.itemnumber = playerinfo.Value<int>("item_5");
-
+                        tempitem.iteminfo = db.ItemNames.SingleOrDefault(x => x.itemnumber == tempitem.itemnumber);
                         itemlist.Add(tempitem);
 
                         matchpi.items = itemlist;
@@ -531,7 +531,56 @@ namespace Dota2ProTrend
 
             return newid;
         }
+        public static void updateItemData()
+        {
 
+
+            Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+            string itemdataurl = "http://dota2protrends.azurewebsites.net/iteminfo.js";
+            WebClient wc = new WebClient();
+            string data = wc.DownloadString(itemdataurl);
+
+
+
+            var itemcontent = JObject.Parse(data);
+
+
+
+            JObject Items = itemcontent.Value<JObject>("itemdata");
+
+
+
+            Dictionary<string, ItemFormat> values = JsonConvert.DeserializeObject<Dictionary<string, ItemFormat>>(Items.ToString());
+
+
+
+            foreach (KeyValuePair<string, ItemFormat> entry in values)
+            {
+
+                var updateitem = db.ItemNames.SingleOrDefault(x => x.itemnumber == entry.Value.id);
+
+                if (updateitem == null)
+                {
+
+
+                }
+                else
+                {
+
+                    updateitem.itemurl = "" + entry.Value.img;
+                    updateitem.itemname = entry.Value.dname;
+                }
+                //Debug.WriteLine(entry.Value.dname);
+
+               
+            }
+
+            db.SaveChanges();
+
+
+
+        }
         public static void populateItemandHeroData()
         {
 
@@ -611,6 +660,25 @@ namespace Dota2ProTrend
 
 
     }
+    public class ItemFormat{
 
+        public int id;
+        public string img;
+        public string dname;
+        public string qual;
+        public int cost;
+        public string desc;
+        public string notes;
+        public string attrib;
+        public string mc;
+        public string cd;
+        public string lore;
+        public bool created;
+        public string[] components;
+
+       
+
+
+    }
 
 }

@@ -83,6 +83,7 @@ namespace Dota2ProTrend.Models
         public int id { get; set; }
         public int itemnumber { get; set; }
         public string itemname { get; set; }
+        public string itemurl { get; set; }
         
         
 
@@ -92,10 +93,10 @@ namespace Dota2ProTrend.Models
     {
         public int id { get; set; }
         public int itemnumber { get; set; }
-        
+        public virtual ItemNames iteminfo { get; set; }
         public virtual GamePlayerModel gameplayer { get; set; }
         public int GamePlayerModel_id { get; set; }
-
+        
     }
 
     public class SkillTimings

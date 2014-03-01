@@ -17,6 +17,24 @@ namespace Dota2ProTrend.Controllers
         //
         // GET: /Home/
 
+        public ActionResult Index2()
+        {
+            //int[] herocount = new int[108];
+            Dictionary<string, int> herodict = new Dictionary<string, int>();
+            foreach (var heroid in db.Heroes)
+            {
+
+                var count = db.GamePlayers.Where(s => s.hero.heronumber == heroid.heronumber).Count();
+                herodict.Add(heroid.heroname, count);
+
+            }
+
+            ViewBag.herolist = herodict;
+
+
+            return View(db.Matches.ToList());
+        }
+
         public ActionResult Index()
         {
             return View(db.Matches.ToList());
@@ -27,7 +45,7 @@ namespace Dota2ProTrend.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            var match = db.GamePlayers.Where(s => s.matchid == id);
+            var match = db.GamePlayers.Where(s => s.matchid == id).OrderBy(s=>s.playerslot);
             if (match == null)
             {
                 return HttpNotFound();
@@ -124,9 +142,5 @@ namespace Dota2ProTrend.Controllers
         }
     }
 
-    public class DataViewModel
-    {
-        public ProjectNew ProjectNew { get; set; }
-        public ProjectOld ProjectOld { get; set; }
-    }
+   
 }
