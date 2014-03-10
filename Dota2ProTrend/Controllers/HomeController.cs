@@ -122,8 +122,8 @@ namespace Dota2ProTrend.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Matches.Add(match);
-                db.SaveChanges();
+                //db.Matches.Add(match);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -152,8 +152,8 @@ namespace Dota2ProTrend.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(match).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(match).State = EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(match);
@@ -180,8 +180,8 @@ namespace Dota2ProTrend.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Match match = db.Matches.Find(id);
-            db.Matches.Remove(match);
-            db.SaveChanges();
+            //db.Matches.Remove(match);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
