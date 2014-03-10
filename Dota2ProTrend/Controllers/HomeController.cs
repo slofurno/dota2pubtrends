@@ -17,17 +17,26 @@ namespace Dota2ProTrend.Controllers
         //
         // GET: /Home/
 
-        public ActionResult Index2()
+        public ActionResult Index()
         {
             //int[] herocount = new int[108];
             Dictionary<string, int> herodict = new Dictionary<string, int>();
-            foreach (var heroid in db.Heroes)
-            {
 
+            var herolist = db.Heroes.ToList();
+
+            foreach (var heroid in herolist)
+            {
+                
                 var count = db.GamePlayers.Where(s => s.hero.heronumber == heroid.heronumber).Count();
-                herodict.Add(heroid.heroname, count);
+
+                if (count > 30)
+                {
+                    herodict.Add(heroid.heroname, count);
+                }
 
             }
+
+            
 
             ViewBag.herolist = herodict;
 
@@ -35,13 +44,54 @@ namespace Dota2ProTrend.Controllers
             return View(db.Matches.ToList());
         }
 
-        public ActionResult Index()
+        public ActionResult Index2()
         {
             return View(db.Matches.ToList());
         }
 
         //
         // GET: /Home/Details/5
+
+        public ActionResult Hero(int id = 0)
+        {
+
+            List<Match> matchlist = new List<Match>();
+            var herolist = db.GamePlayers.Where(s => s.hero.heronumber == id).ToList();
+
+
+            foreach (var game in herolist)
+            {
+
+                matchlist.Add(game.match);
+
+
+            }
+
+            ViewBag.Title = "Matches with " + db.Heroes.FirstOrDefault(s => s.heronumber == id).heroname;
+
+            return View(matchlist);
+        }
+
+        public ActionResult Player(int id = 0)
+        {
+
+            List<Match> matchlist = new List<Match>();
+            var playerlist = db.GamePlayers.Where(s => s.player.playerident == id).ToList();
+
+
+            foreach (var game in playerlist)
+            {
+
+                matchlist.Add(game.match);
+
+
+            }
+            ViewBag.Title = db.Players.FirstOrDefault(s => s.playerident == id).name + "'s Matches";
+
+             
+
+            return View(matchlist);
+        }
 
         public ActionResult Details(int id = 0)
         {

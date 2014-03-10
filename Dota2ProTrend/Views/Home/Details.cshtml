@@ -24,6 +24,8 @@
             @Html.DisplayNameFor(model => model.assists)
         </th>
         <th>
+           
+
             @Html.DisplayNameFor(model => model.hero.heroname)
         </th>
         <th></th>
@@ -33,7 +35,8 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(model => item.player.name)
+                
+                @Html.ActionLink(item.player.name, "Player", new { id = item.player.playerident })
             </td>
             <td>
                 @Html.DisplayFor(model => item.kills)
@@ -45,7 +48,8 @@
                 @Html.DisplayFor(model => item.assists)
             </td>
             <td>
-                @Html.DisplayFor(model => item.hero.heroname)
+                
+                @Html.ActionLink(item.hero.heroname, "Hero", new { id = item.hero.heronumber })
             </td>
             <td>
                 @foreach (var i in item.items)

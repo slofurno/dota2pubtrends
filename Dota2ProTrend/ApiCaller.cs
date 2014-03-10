@@ -26,10 +26,11 @@ namespace Dota2ProTrend
         public static List<int> teamstoupdate = new List<int>();
         public static List<int> playerids = new List<int>()
         {
-            67601693, 86715129, 109778511, 115975133, 67760037, 40547474, 30237211, 86726887, 88719902, 5448108, 85805514, 21604967, 87276347, 86745912, 121847953, 
-            118073569, 132291754
+            67601693, 86715129, 109778511, 115975133, 67760037, 40547474, 30237211, 86726887, 88719902, 5448108, 85805514, 21604967, 87276347, 86745912, 121847953, 118073569, 132291754
 
         };
+
+        
 
         //public static void OnCallTimedEvent(object source, ElapsedEventArgs e)
         /*
@@ -111,7 +112,7 @@ namespace Dota2ProTrend
         {
 
             HttpClient client = new HttpClient();
-            string baseurl = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=65C5ADADF141DB0495C3FBBCA6D65689&matches_requested=5&account_id=";
+            string baseurl = "https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001/?key=65C5ADADF141DB0495C3FBBCA6D65689&matches_requested=20&account_id=";
 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -119,6 +120,7 @@ namespace Dota2ProTrend
             JObject content;
             JObject resultobject;
             JArray matches;
+            
 
             for (var i = 0; i < playerids.Count; i++)
             {
@@ -126,14 +128,25 @@ namespace Dota2ProTrend
                 result = client.GetAsync(baseurl + playerids[i] + "").Result;
                 content = result.Content.ReadAsAsync<JObject>().Result;
                 resultobject = content.Value<JObject>("result");
-                matches = resultobject.Value<JArray>("matches");
 
-                var matchlist = matches.ToList();
+                if (resultobject.Value<int>("status") != 1)
+                {
+                    Debug.WriteLine("player id " + playerids[i] + " does not have public api info available");
 
-                foreach (var match in matchlist)
+                }
+                else
                 {
 
-                    addMatch(match.Value<int>("match_id"));
+                    matches = resultobject.Value<JArray>("matches");
+
+                    var matchlist = matches.ToList();
+
+                    foreach (var match in matchlist)
+                    {
+
+                        addMatch(match.Value<int>("match_id"));
+
+                    }
 
                 }
 
@@ -257,6 +270,7 @@ namespace Dota2ProTrend
                         var heroid = playerinfo.Value<int>("hero_id");
 
                         matchpi.playerid = getPlayer(accountid).id;
+                        //matchpi.player = getPlayer(accountid);
                         //matchpi.playerid = db.Players.FirstOrDefault(x => x.playerident == accountid).id;
                         matchpi.matchid = db.Matches.FirstOrDefault(s => s.matchnumber == newmatch.matchnumber).id;
                         matchpi.hero = db.Heroes.FirstOrDefault(x=> x.heronumber == heroid);

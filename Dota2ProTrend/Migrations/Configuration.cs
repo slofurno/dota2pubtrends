@@ -9,7 +9,7 @@ namespace Dota2ProTrend.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(Dota2ProTrend.Models.Dota2ProTrendContext context)
