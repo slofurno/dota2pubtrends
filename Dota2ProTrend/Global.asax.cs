@@ -30,7 +30,7 @@ namespace Dota2ProTrend
             Thread t = new Thread(ApiCaller.getSomeMatches);
 
 
-           t.Start();
+           //t.Start();
         }
     }
 }

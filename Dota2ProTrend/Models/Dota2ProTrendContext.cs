@@ -15,6 +15,8 @@ namespace Dota2ProTrend.Models
 
         public Dota2ProTrendContext() : base("name=Dota2ProTrendContext")
         {
+            
+
         }
 
         public DbSet<Match> Matches { get; set; }
