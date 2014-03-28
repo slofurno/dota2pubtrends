@@ -12,6 +12,47 @@ using Dota2ProTrend.Models;
 
 namespace Dota2ProTrend.Controllers
 {
+
+    public class PlayersController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<Player> GetPlayers()
+        {
+
+
+            var playerlist = db.Players.ToList();
+
+
+
+            return playerlist;
+
+        }
+
+    }
+
+    public class PlayerMatchesController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<Match> GetMatches(int id)
+        {
+            List<Match> matchlist = new List<Match>();
+            var playerlist = db.GamePlayers.Where(s => s.player.id == id).ToList();
+
+
+            foreach (var game in playerlist)
+            {
+
+                matchlist.Add(game.match);
+
+
+            }
+            return matchlist;
+        }
+
+    }
+
     public class Dota2Controller : ApiController
     {
         private Dota2ProTrendContext db = new Dota2ProTrendContext();
@@ -21,18 +62,33 @@ namespace Dota2ProTrend.Controllers
         {
             return db.Matches.ToList();
         }
+        /*
+        public IEnumerable<Match> GetMatches(int id)
+        {
+            List<Match> matchlist = new List<Match>();
+            var playerlist = db.GamePlayers.Where(s => s.player.id == id).ToList();
 
+
+            foreach (var game in playerlist)
+            {
+
+                matchlist.Add(game.match);
+
+
+            }
+            return matchlist;
+        }
+        */
         // GET api/Dota2/5
         public Match GetMatch(int id)
         {
-            Match match = db.Matches.Find(id);
-            if (match == null)
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
-            }
+
+            var match = db.Matches.First(s => s.id == id);
 
             return match;
+
         }
+
 
         // PUT api/Dota2/5
         public HttpResponseMessage PutMatch(int id, Match match)

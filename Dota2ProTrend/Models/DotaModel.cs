@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 namespace Dota2ProTrend.Models
 {
 
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class Match
     {
         [DataMember]
@@ -24,7 +24,7 @@ namespace Dota2ProTrend.Models
         public int starttime { get; set; }
         [DataMember]
         public int gamemode { get; set; }
-         [DataMember]
+        [DataMember]
         public virtual ICollection<GamePlayerModel> gameplayers { get; set; }
 
         public Match()
@@ -32,21 +32,23 @@ namespace Dota2ProTrend.Models
 
         }
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class GamePlayerModel
     {
 
         public int id { get; set; }
         public int matchid { get; set; }
+
+        [DataMember]
         public int playerid { get; set; }
 
         [JsonIgnore]
         public virtual Match match { get; set; }
 
-       [DataMember]
+        [DataMember]
         public virtual Player player { get; set; }
 
-        [JsonIgnore] 
+        //[DataMember]
         public virtual ICollection<Item> items { get; set; }
         [JsonIgnore]
         public virtual ICollection<SkillTimings> skills { get; set; }
@@ -77,7 +79,7 @@ namespace Dota2ProTrend.Models
 
 
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class Player
     {
 
@@ -93,7 +95,7 @@ namespace Dota2ProTrend.Models
 
 
         }
-
+        [DataMember]
         public int id { get; set; }
         [DataMember]
         public long playerident { get; set; }
@@ -103,7 +105,7 @@ namespace Dota2ProTrend.Models
 
 
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class Hero
     {
 
@@ -118,13 +120,14 @@ namespace Dota2ProTrend.Models
 
         }
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class ItemNames
     {
 
         public int id { get; set; }
         public int itemnumber { get; set; }
         public string itemname { get; set; }
+        [DataMember]
         public string itemurl { get; set; }
 
         public ItemNames()
@@ -133,16 +136,16 @@ namespace Dota2ProTrend.Models
         }
 
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class Item
     {
         public int id { get; set; }
         public int itemnumber { get; set; }
-        [JsonIgnore]
-        [XmlIgnoreAttribute]
+
+        [DataMember]
         public virtual ItemNames iteminfo { get; set; }
-        [JsonIgnore]
-        [XmlIgnoreAttribute]
+        
+        
         public virtual GamePlayerModel gameplayer { get; set; }
         public int GamePlayerModel_id { get; set; }
 
@@ -151,7 +154,7 @@ namespace Dota2ProTrend.Models
 
         }
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class SkillTimings
     {
 
@@ -178,7 +181,7 @@ namespace Dota2ProTrend.Models
 
         }
     }
-    [DataContract(IsReference = true)]
+    [DataContract]
     public class Skill
     {
         public int id { get; set; }

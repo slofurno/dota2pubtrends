@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>User Manager</h1>
+        <hr />
+        <div class="page"></div>
+    </div><script src="Scripts/jquery-1.8.2.min.js"></script>
+    
+    <script src="Scripts/underscore.min.js"></script>
+    <script src="Scripts/backbone.min.js"></script>
+    <script type="text/template" id="user-list-template">
+        <a href="#/new" class="btn btn-primary">New</a>
+        <hr />
+        <table class="table striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>matchnumber</th>
+                    <th>mode</th>
+                    <th>playerlist</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% _.each(users, function(user) { %>
+                <tr>
+                    <td><%= htmlEncode(user.get('id')) %></td>
+                    <td><%= htmlEncode(user.get('matchnumber')) %></td>
+                    <td><%= htmlEncode(user.get('gamemode')) %></td>
+
+
+
+                    <td>
+
+                      
+
+                        <% _.each(user.get('gameplayers'), function(gp) { %>
+                        <p><a class="btn" href="#/player/<%= gp.player.id %>"><%= gp.player.name %></a></p>
+                        <% }); %>
+
+                       
+
+
+                    </td>
+                </tr>
+                <% }); %>
+
+
+
+
+            </tbody>
+        </table>
+    </script>
+    <script type="text/template" id="player-list-template">
+        <a href="#/new" class="btn btn-primary">New</a>
+        <hr />
+        <table class="table striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% _.each(users, function(user) { %>
+                <tr>
+                    <td><a class="btn" href="#/player/<%= user.id %>"><%= htmlEncode(user.get('name')) %> </a></td>
+                    <td></td>
+                    <td></td>
+                    <td><a class="btn" href="#/edit/<%= user.id %>">Edit</a></td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </script>
+
+
+    <script type="text/template" id="edit-user-template">
+        <form class="edit-user-form">
+            <legend><%= user ? 'Edit' : 'New' %> User</legend>
+            <label>First Name</label>
+            <input name="firstname" type="text" value="<%= user ? user.get('firstname') : '' %>">
+            <label>Last Name</label>
+            <input name="lastname" type="text" value="<%= user ? user.get('lastname') : '' %>">
+            <label>Age</label>
+            <input name="age" type="text" value="<%= user ? user.get('age') : '' %>">
+            <hr />
+            <button type="submit" class="btn"><%= user ? 'Update' : 'Create' %></button>
+            <% if(user) { %>
+            <input type="hidden" name="id" value="<%= user.id %>" />
+            <button data-user-id="<%= user.id %>" class="btn btn-danger delete">Delete</button>
+            <% }; %>
+        </form>
+    </script>
+
+    <script>
+        function htmlEncode(value) {
+            return $('<div/>').text(value).html();
+        }
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        var Players = Backbone.Collection.extend({
+            url: '/api/players'
+        });
+
+        var Users = Backbone.Collection.extend({
+            url: '/api/dota2'
+        });
+
+        var Matches = Backbone.Collection.extend({
+
+            initialize: function(props) { 
+                this.url = '/api/playermatches/' + props.id;
+            }
+
+            
+        });
+
+        var Match = Backbone.Model.extend({
+            urlRoot: '/api/dota2'
+
+        });
+
+        var User = Backbone.Model.extend({
+            urlRoot: '/api/dota2'
+        });
+
+        var UserListView = Backbone.View.extend({
+            el: '.page',
+            render: function () {
+                var that = this;
+                var users = new Players();
+                users.fetch({
+                    success: function (users) {
+                        var template = _.template($('#player-list-template').html(), { users: users.models });
+                        that.$el.html(template);
+                    }
+                })
+            }
+        });
+
+        var userListView = new UserListView();
+
+        var MatchListView = Backbone.View.extend({
+            el: '.page',
+            render: function (options) {
+                var that = this;
+                var users = new Matches({ id: options.id });
+                users.fetch({
+                    success: function (users) {
+                        var template = _.template($('#user-list-template').html(), { users: users.models });
+                        that.$el.html(template);
+                    }
+                })
+            }
+        });
+
+        var matchListView = new MatchListView();
+
+        var UserEditView = Backbone.View.extend({
+            el: '.page',
+            events: {
+                'submit .edit-user-form': 'saveUser',
+                'click .delete': 'deleteUser'
+            },
+            saveUser: function (ev) {
+                var userDetails = $(ev.currentTarget).serializeObject();
+                var user = new User();
+                user.save(userDetails, {
+                    success: function (user) {
+                        router.navigate('', { trigger: true });
+                    }
+                });
+                return false;
+            },
+            deleteUser: function (ev) {
+                this.user.destroy({
+                    success: function () {
+                        console.log('destroyed');
+                        router.navigate('', { trigger: true });
+                    }
+                });
+                return false;
+            },
+            render: function (options) {
+                var that = this;
+                if (options.id) {
+                    that.user = new User({ id: options.id });
+                    that.user.fetch({
+                        success: function (user) {
+                            var template = _.template($('#edit-user-template').html(), { user: user });
+                            that.$el.html(template);
+                        }
+                    })
+                } else {
+                    var template = _.template($('#edit-user-template').html(), { user: null });
+                    that.$el.html(template);
+                }
+            }
+        });
+
+        var userEditView = new UserEditView();
+
+        var Router = Backbone.Router.extend({
+            routes: {
+                "": "home",
+                "edit/:id": "edit",
+                "new": "edit",
+                "player/:id" : "player",
+            }
+        });
+
+        var router = new Router;
+        router.on('route:home', function () {
+            // render user list
+            userListView.render();
+        })
+        router.on('route:edit', function (id) {
+            userEditView.render({ id: id });
+        })
+        router.on('route:player', function (id) {
+            // render user list
+            matchListView.render({ id: id });
+        })
+        Backbone.history.start();
+    </script>
+</body>
+</html>
