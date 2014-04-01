@@ -9,9 +9,102 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using Dota2ProTrend.Models;
+using System.Diagnostics;
 
 namespace Dota2ProTrend.Controllers
 {
+
+    public class HeroListController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<Hero> GetPlayers()
+        {
+
+
+
+
+
+
+
+            return db.Heroes.ToList();
+
+        }
+
+    }
+
+    public class MatchesByHeroController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<GamePlayerModel> GetPlayers(int id)
+        {
+
+            var result = db.GamePlayers.Where(s => s.hero.heronumber == id).ToList();
+
+
+            return result;
+
+
+            
+
+        }
+
+    }
+
+    public class SeedPlayersController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<Player> GetPlayers()
+        {
+
+            List<Player> playerlist = new List<Player>();
+
+            foreach (var id in ApiCaller.playerids)
+            {
+                playerlist.Add(db.Players.First(s => s.playerident == id));
+
+            }
+
+           
+
+
+
+            return playerlist;
+
+        }
+
+    }
+
+    public class HeroesController : ApiController
+    {
+        private Dota2ProTrendContext db = new Dota2ProTrendContext();
+
+        public IEnumerable<GamePlayerModel> GetPlayers()
+        {
+
+            List<GamePlayerModel> playerlist = new List<GamePlayerModel>();
+
+            foreach (var id in ApiCaller.playerids)
+            {
+                var result = db.GamePlayers.Where(s => s.player.playerident == id).ToList();
+
+                if (result != null)
+                {
+
+                    playerlist.AddRange(result);
+                }
+
+
+
+
+            }
+
+            return playerlist;
+        }
+
+    }
 
     public class PlayersController : ApiController
     {
@@ -20,12 +113,44 @@ namespace Dota2ProTrend.Controllers
         public IEnumerable<Player> GetPlayers()
         {
 
+            Debug.WriteLine("sending seed data");
 
-            var playerlist = db.Players.ToList();
+            List<Player> playerlist = new List<Player>();
+
+            foreach (var id in ApiCaller.playerids)
+            {
+                var result = db.Players.FirstOrDefault(s => s.playerident == id);
+
+                if (result != null)
+                {
+
+                    playerlist.Add(result);
+                }
+
+
+
+
+            }
+
+
 
 
 
             return playerlist;
+
+        }
+
+        public Player GetPlayer(int id)
+        {
+
+            var result = db.Players.FirstOrDefault(s => s.id == id);
+
+            if (result != null)
+            {
+
+                return result;
+            }
+            return new Player();
 
         }
 

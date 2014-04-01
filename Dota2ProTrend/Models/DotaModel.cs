@@ -24,7 +24,7 @@ namespace Dota2ProTrend.Models
         public int starttime { get; set; }
         [DataMember]
         public int gamemode { get; set; }
-        [DataMember]
+        
         public virtual ICollection<GamePlayerModel> gameplayers { get; set; }
 
         public Match()
@@ -42,18 +42,18 @@ namespace Dota2ProTrend.Models
         [DataMember]
         public int playerid { get; set; }
 
-        [JsonIgnore]
+        [DataMember]
         public virtual Match match { get; set; }
 
         [DataMember]
         public virtual Player player { get; set; }
 
-        //[DataMember]
+        [DataMember]
         public virtual ICollection<Item> items { get; set; }
         [JsonIgnore]
         public virtual ICollection<SkillTimings> skills { get; set; }
 
-        [JsonIgnore]
+        [DataMember]
         public virtual Hero hero { get; set; }
 
         [DataMember]
@@ -140,6 +140,7 @@ namespace Dota2ProTrend.Models
     public class Item
     {
         public int id { get; set; }
+        [DataMember]
         public int itemnumber { get; set; }
 
         [DataMember]

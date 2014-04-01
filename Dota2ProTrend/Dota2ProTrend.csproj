@@ -202,6 +202,9 @@
     <Content Include="Content\Site.css" />
     <None Include="Properties\PublishProfiles\Dota2ProTrends - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\Dota2ProTrends - Web Deploy.pubxml" />
+    <Content Include="img\empty.JPG" />
+    <Content Include="index - Copy %282%29.html" />
+    <Content Include="index - Copy.html" />
     <Content Include="index.html" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />

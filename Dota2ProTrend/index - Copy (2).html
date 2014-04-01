@@ -2,54 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <style>
-        .left {
-            left: 10px;
-            width: 15%;
-            float: left;
-            background: #C8FC98;
-            top:200px;
-        }
-        .right {
-            margin-left: 15%;
-            width: 70%;
-            background: #aaa;
-            top: 200px;
-        }
-        .container{
-            margin: 0 auto;
-            width: 888px;
-
-        }
-
-
-    </style>
 </head>
 <body>
 
     <div class="container">
         <h1>what a player</h1>
         <hr />
-        <br />
-
-        <div class="left">
-
-     
-
-
-        </div>
-        <div class="right">
-        
-        
-
-        </div>
-      
         <div class="page"></div>
-
-
-    </div>
-    
-    <script src="Scripts/jquery-1.8.2.min.js"></script>
+    </div><script src="Scripts/jquery-1.8.2.min.js"></script>
     
     <script src="Scripts/underscore.min.js"></script>
     <script src="Scripts/backbone.min.js"></script>
@@ -119,26 +79,7 @@
             </tbody>
         </table>
     </script>
-    <script type="text/template" id="hero-template">
-        <a href="#"><%= heroname %></a>
 
-    </script>
-
-    <script type="text/template" id="gameplayer-template">
-
-            <%= player.name %> <% _.each(items, function(item) { %>
-
-          <% if (item.iteminfo) { %>
-        
-         
-
-        <img src= <%= getUrl(item.iteminfo.itemurl)%> width="32" height="24"/>
-
-        <% } %>
-                <% }); %>
-        <br />
-
-    </script>
 
     <script type="text/template" id="edit-user-template">
         <form class="edit-user-form">
@@ -162,19 +103,6 @@
         function htmlEncode(value) {
             return $('<div/>').text(value).html();
         }
-
-        function getUrl(item) {
-
-            if (item) {
-
-                return "http://cdn.dota2.com/apps/dota2/images/items/" + item + "";
-            }
-            else {
-
-                return "img/empty.jpg";
-            }
-        }
-
         $.fn.serializeObject = function () {
             var o = {};
             var a = this.serializeArray();
@@ -192,23 +120,6 @@
         };
 
         
-        var GamePlayer = Backbone.Model.extend({
-
-
-        });
-
-        var GamePlayers = Backbone.Collection.extend({
-            model: GamePlayer,
-            customFilter: function (filters) {
-                var results = this.where(filters);
-                return new GamePlayers(results);
-            },
-            url: '/api/heroes'
-
-
-        });
-
-        var gamePlayers = new GamePlayers();
 
         var Player = Backbone.Model.extend({
             defaults: {
@@ -224,90 +135,33 @@
             url: '/api/players'
         });
 
-       
 
 
+  
 
+        var Matches = Backbone.Collection.extend({
 
+            initialize: function(props) { 
+                this.url = '/api/playermatches/' + props.id;
+            }
 
-
-
+            
+        });
 
         var Match = Backbone.Model.extend({
         
 
-        });
-
-
-        var Matches = Backbone.Collection.extend({
-            model:Match,
-            initialize: function (props) {
-                this.url = '/api/playermatches/' + props.id;
-            }
-
+            urlRoot: '/api/dota2'
 
         });
-
-
 
         var User = Backbone.Model.extend({
             urlRoot: '/api/dota2'
         });
 
-
-       
-        
-        
-
-        var GamePlayerView = Backbone.View.extend({
-            el: '.right',
-
-            initialize: function () {
-
-                this.collection.bind('reset', this.render);
-
-            },
-            template: _.template($('#gameplayer-template').html()),
-
-            render: function () {
-            
-                //var temp = new GamePlayers({ "player": { "id": 6, "playerident": 67601693, "name": "[HyperX] Liquid`TC" }});
-                var self = this;
-                //temp = temp.toJSON();
-
-                var html = [];
-
-                this.$el.html('');
-                //var template = _.template($('#gameplayer-template').html());
-                console.log(this.collection);
-                this.collection.each(function (item) {
-                    console.log(self.template(item.toJSON()));
-                    html.push(self.template(item.toJSON()));
-
-                });
-
-                this.$el.html(html);
-                return this;
-
-            }
-        });
-
-        var gamePlayerView = new GamePlayerView({ collection: gamePlayers });
-
-        gamePlayers.fetch({
-            success: function () {
-                gamePlayerView.render();
-            }
-        
-        });
-
         var UserListView = Backbone.View.extend({
             el: '.page',
-
-            initialize: function () {
-
-            },
-
+   
 
             render: function () {
                 var that = this;
@@ -341,78 +195,7 @@
         var matchListView = new MatchListView();
 
        
-        var Hero = Backbone.Model.extend({
-            defaults: {
-                heronumber: -1,
-                heroname: ''
 
-            },
-
-        });
-
-        var HeroList = Backbone.Collection.extend({
-            model: Hero,
-            url: '/api/herolist'
-
-
-        });
-
-        var HeroView = Backbone.View.extend({
-
-            events: {
-                "click a": "clicked"
-            },
-
-            clicked: function (e) {
-                e.preventDefault();
-                var name = this.model.get("heronumber");
-                gamePlayers.fetch({url:'api/matchesbyhero/'+name,
-                    success: function () {
-                        gamePlayerView.render();
-                    }
-
-                });
-
-            },
-
-            render: function () {
-                var template = _.template($('#hero-template').html())
-                var html = template(this.model.toJSON());
-                $(this.el).append(html);
-            }
-        });
-
-        var HeroListView = Backbone.View.extend({
-
-
-            el: '.left',
-
-            initialize: function () {
-                _.bindAll(this, "renderItem");
-            },
-
-            renderItem: function (model) {
-                var heroView = new HeroView({ model: model });
-                heroView.render();
-                $(this.el).append(heroView.el);
-            },
-
-            render: function () {
-                this.collection.each(this.renderItem);
-            }
-
-        });
-
-        var herolist = new HeroList();
-
-        var herolistview = new HeroListView({ collection: herolist });
-
-        herolist.fetch({
-            success: function () {
-                herolistview.render();
-            }
-
-        });
        
 
         var Router = Backbone.Router.extend({
@@ -426,7 +209,7 @@
         var router = new Router;
         router.on('route:home', function () {
             // render user list
-           // gamePlayerView.render();
+            userListView.render();
         })
    
         router.on('route:player', function (id) {
