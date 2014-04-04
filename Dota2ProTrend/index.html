@@ -242,7 +242,22 @@
 
 
        
-        
+        var GPV = Backbone.View.extend({
+            initialize: function () {
+                this.listenTo(this.model, 'change', this.render);
+                this.listenTo(this.model, 'remove', this.remove);
+            },
+            template: _.template($('#gameplayer-template').html()),
+            render: function () {
+
+                this.$el.html(this.template(this.model.toJSON()));
+                return this;
+
+            },
+    
+
+
+        });
         
 
         var GamePlayerView = Backbone.View.extend({
@@ -251,6 +266,9 @@
             initialize: function () {
 
                 this.collection.bind('reset', this.render);
+                
+                
+                
 
             },
             template: _.template($('#gameplayer-template').html()),
@@ -259,20 +277,18 @@
             
                 //var temp = new GamePlayers({ "player": { "id": 6, "playerident": 67601693, "name": "[HyperX] Liquid`TC" }});
                 var self = this;
-                //temp = temp.toJSON();
+             
 
-                var html = [];
+                //this.$el.html('');
+               
+                _.each(this.collection.models, function (item) {
+                    var gpv = new GPV({
+                        model: item
+                    });
+                    this.$el.append(gpv.render().el);
+                }, this);
 
-                this.$el.html('');
-                //var template = _.template($('#gameplayer-template').html());
-                console.log(this.collection);
-                this.collection.each(function (item) {
-                    console.log(self.template(item.toJSON()));
-                    html.push(self.template(item.toJSON()));
-
-                });
-
-                this.$el.html(html);
+               
                 return this;
 
             }
@@ -282,7 +298,7 @@
 
         gamePlayers.fetch({
             success: function () {
-                gamePlayerView.render();
+               gamePlayerView.render();
             }
         
         });
@@ -400,6 +416,10 @@
 
         });
        
+
+        
+
+
 
         var Router = Backbone.Router.extend({
             routes: {
