@@ -21,6 +21,10 @@
             width: 888px;
 
         }
+        .gameplayer{
+            background: red;
+
+        }
 
 
     </style>
@@ -243,14 +247,17 @@
 
        
         var GPV = Backbone.View.extend({
+            //className: 'gameplayer',
             initialize: function () {
-                this.listenTo(this.model, 'change', this.render);
+                //this.listenTo(this.model, 'change', this.render);
                 this.listenTo(this.model, 'remove', this.remove);
             },
             template: _.template($('#gameplayer-template').html()),
             render: function () {
 
                 this.$el.html(this.template(this.model.toJSON()));
+                console.log('rendering a view... ' + this.model.get('id'));
+                
                 return this;
 
             },
@@ -265,8 +272,8 @@
 
             initialize: function () {
 
-                this.collection.bind('reset', this.render);
-                
+                //this.collection.bind('reset', this.render);
+                this.listenTo(this.collection, 'add', this.renderNew);
                 
                 
 
@@ -290,6 +297,14 @@
 
                
                 return this;
+
+            },
+
+            renderNew: function (addedModel) {
+                var gpv = new GPV({
+                    model: addedModel
+                });
+                this.$el.append(gpv.render().el);
 
             }
         });
@@ -367,10 +382,10 @@
 
             clicked: function (e) {
                 e.preventDefault();
-                var name = this.model.get("heronumber");
-                gamePlayers.fetch({url:'api/matchesbyhero/'+name,
+                var heronumber = this.model.get("heronumber");
+                gamePlayers.fetch({url:'api/matchesbyhero/'+heronumber,
                     success: function () {
-                        gamePlayerView.render();
+                        //gamePlayerView.render();
                     }
 
                 });

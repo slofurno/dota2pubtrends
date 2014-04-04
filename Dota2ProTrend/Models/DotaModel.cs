@@ -35,7 +35,7 @@ namespace Dota2ProTrend.Models
     [DataContract]
     public class GamePlayerModel
     {
-
+        [DataMember]
         public int id { get; set; }
         public int matchid { get; set; }
 
