@@ -256,7 +256,7 @@
             render: function () {
 
                 this.$el.html(this.template(this.model.toJSON()));
-                console.log('rendering a view... ' + this.model.get('id'));
+                console.log('rendering a view for model id: ' + this.model.get('id'));
                 
                 return this;
 
